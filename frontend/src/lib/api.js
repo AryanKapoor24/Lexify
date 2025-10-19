@@ -2,7 +2,8 @@ export async function analyzePdf(file) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch('/api/analyze', {
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+  const response = await fetch(`${baseUrl}/analyze`, {
     method: 'POST',
     body: formData,
   });

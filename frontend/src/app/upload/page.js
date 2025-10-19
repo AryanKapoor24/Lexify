@@ -6,6 +6,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import UploadArea from '../../components/UploadArea';
 import Chatbot from '../../components/Chatbot';
+import { analyzePdf } from '../../lib/api';
 
 export default function UploadPage() {
   const router = useRouter();
@@ -39,18 +40,18 @@ export default function UploadPage() {
     }, 200);
     
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const result = await analyzePdf(file);
       setUploadProgress(100);
-      
-      // Simulate successful upload
-      setTimeout(() => {
-        setUploading(false);
-        setUploadProgress(0);
-        setFile(null);
-        // Navigate to results page
-        router.push('/results');
-      }, 500);
+
+      // Persist result for results page
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('analysisResult', JSON.stringify(result));
+      }
+
+      setUploading(false);
+      setUploadProgress(0);
+      setFile(null);
+      router.push('/results');
     } catch (error) {
       setUploading(false);
       setUploadProgress(0);

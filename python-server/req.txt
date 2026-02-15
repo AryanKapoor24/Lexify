@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+python-multipart
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+pypdf
+chromadb==0.4.24
+sentence-transformers
+pydantic-settings
+numpy<2.0 # <-- Add this line to fix compatibility

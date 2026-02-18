@@ -25,7 +25,7 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!file) return;
     const form = new FormData();
-    form.append("pdfFile", file);
+    form.append("file", file);
 
     setUploading(true);
     setUploadProgress(0);
@@ -44,12 +44,23 @@ export default function UploadPage() {
 
       // Wrap XHR in a Promise for better async/await handling
       const response = await new Promise((resolve, reject) => {
-        xhr.open("POST", "http://localhost:5000/upload");
+        xhr.open("POST", "http://localhost:3001/api/upload");
         xhr.onload = () => resolve(xhr);
         xhr.onerror = () => reject(new Error("Network error while uploading file"));
         xhr.onabort = () => reject(new Error("Upload was cancelled"));
         xhr.send(form);
       });
+
+      if (response.status >= 400) {
+        let errorInfo = "Upload failed";
+        try {
+          const errorResponse = JSON.parse(response.responseText);
+          errorInfo = errorResponse.error || `Upload failed with status ${response.status}`;
+        } catch (e) {
+          // Ignore if response is not JSON
+        }
+        throw new Error(errorInfo);
+      }
 
       let responseBody;
       try {
@@ -58,22 +69,14 @@ export default function UploadPage() {
         console.error("Failed to parse JSON response:", err);
         throw new Error("Invalid response from server");
       }
-
-      if (response.status >= 400 || !responseBody.success) {
-        throw new Error(responseBody?.error || `Upload failed with status ${response.status}`);
-      }
-
+      
       console.log("Upload successful:", responseBody);
       
       // Store the parsed data in session storage
       sessionStorage.setItem('analysisResults', JSON.stringify({
         fileName: file.name,
         fileSize: file.size,
-        text: responseBody.text,
-        pages: responseBody.pages,
-        wordCount: responseBody.wordCount,
-        preview: responseBody.preview,
-        timestamp: new Date().toISOString()
+        ...responseBody
       }));
       
       // Redirect to results page
@@ -89,22 +92,22 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <Header showUploadButton={false} />
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-6 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Upload Your Privacy Policy
+      <main className="max-w-2xl mx-auto px-6 py-12">
+        <div className="mb-10">
+          <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-3">
+            Upload your document
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
-            Drag and drop your PDF file or click to browse. Our AI will analyze it instantly.
+          <p className="text-gray-600 dark:text-gray-400">
+            Drop a PDF file below and we&apos;ll simplify it for you.
           </p>
         </div>
 
         {/* Upload Area */}
-        <div className="mb-8">
+        <div className="mb-6">
           <UploadArea
             onFileSelect={handleFileSelect}
             file={file}
@@ -115,18 +118,18 @@ export default function UploadPage() {
           
           {/* Action Buttons */}
           {file && (
-            <div className="flex space-x-4 mt-6">
+            <div className="flex gap-3 mt-6">
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:cursor-not-allowed"
               >
-                {uploading ? 'Uploading...' : 'Analyze Document'}
+                {uploading ? 'Processing...' : 'Simplify document'}
               </button>
               <button
                 onClick={handleRemove}
                 disabled={uploading}
-                className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Remove
               </button>
@@ -134,61 +137,43 @@ export default function UploadPage() {
           )}
         </div>
 
-        {/* AI Assistant Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
-          <div className="text-center mb-6">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              Need Help Understanding Technical Terms?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Our AI assistant can explain complex legal and technical terms found in government policies. 
-              Click the chat button to get instant explanations!
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mb-6">
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">GDPR</span>
-              <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm font-medium">CCPA</span>
-              <span className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">HIPAA</span>
-              <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 rounded-full text-sm font-medium">PII</span>
-              <span className="px-3 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-200 rounded-full text-sm font-medium">Data Processing</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Features Reminder */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
-          <h3 className="text-2xl font-bold mb-4">What happens next?</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        {/* Info Section */}
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 mt-8">
+          <h3 className="font-medium text-gray-900 dark:text-white mb-4">
+            What we look for
+          </h3>
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h4 className="font-semibold mb-2">1. Upload</h4>
-              <p className="text-blue-100 text-sm">Upload your PDF document securely</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Data collection practices - what info they gather</p>
             </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h4 className="font-semibold mb-2">2. Analyze</h4>
-              <p className="text-blue-100 text-sm">AI processes and analyzes your document</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Third-party sharing - who else sees your data</p>
             </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h4 className="font-semibold mb-2">3. Results</h4>
-              <p className="text-blue-100 text-sm">Get detailed analysis and insights</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Your rights - how to access, delete, or update info</p>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg className="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Security measures - how your data is protected</p>
             </div>
           </div>
         </div>

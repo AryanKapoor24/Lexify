@@ -1,142 +1,169 @@
 import Link from "next/link";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import FeatureCard from "../components/FeatureCard";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <Header />
 
       {/* Hero Section */}
-      <main className="relative">
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="text-center animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 dark:text-white mb-6">
-              AI-Powered
-              <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Privacy Policy
-              </span>
-              <span className="block">Analyzer</span>
+      <main>
+        <div className="max-w-6xl mx-auto px-6 pt-16 pb-24">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-full text-sm font-medium mb-6">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+              Free to use
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
+              Privacy policies,
+              <br />
+              <span className="text-emerald-600">finally readable.</span>
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              Upload any PDF document and get instant, intelligent analysis of privacy policies and legal documents. 
-              Understand what matters most in seconds, not hours.
+            
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 leading-relaxed max-w-xl">
+              Upload any legal document and get a clear, simple breakdown. 
+              No more scrolling through pages of confusing legal jargon.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href="/upload"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              Start Analyzing →
-            </Link>
-            <Link 
-              href="/results"
-              className="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              View Demo Results →
-            </Link>
-              <button className="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                Learn More
-              </button>
+            
+            <div className="flex flex-wrap gap-4">
+              <Link 
+                href="/upload"
+                className="bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                Upload a document
+              </Link>
+              <Link 
+                href="/results"
+                className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
+              >
+                See an example
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Features Section */}
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Powerful Features
+        {/* How it works */}
+        <div className="bg-gray-50 dark:bg-gray-900/50 py-20">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">
+              How it works
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Everything you need to understand and analyze privacy policies with ease
+            <p className="text-gray-600 dark:text-gray-400 mb-12 max-w-xl">
+              Three simple steps to understand any legal document.
             </p>
-          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              }
-              title="PDF Upload & Processing"
-              description="Simply upload any PDF document and our AI will automatically extract and process the text for analysis."
-              iconColor="blue"
-            />
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center mb-4">
+                  <span className="text-emerald-600 dark:text-emerald-400 font-semibold">1</span>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-2">Upload your PDF</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                  Drag and drop any privacy policy or legal document in PDF format.
+                </p>
+              </div>
 
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              }
-              title="AI-Powered Analysis"
-              description="Advanced AI algorithms analyze your documents to identify key privacy concerns, data collection practices, and legal implications."
-              iconColor="green"
-            />
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center mb-4">
+                  <span className="text-amber-600 dark:text-amber-400 font-semibold">2</span>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-2">We process it</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                  Our system reads through the document and identifies key information.
+                </p>
+              </div>
 
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              }
-              title="Instant Results"
-              description="Get comprehensive analysis results in seconds, not hours. No more reading through lengthy legal documents manually."
-              iconColor="purple"
-            />
-
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              }
-              title="Detailed Reports"
-              description="Receive detailed reports with summaries, key findings, and actionable insights about the privacy policy."
-              iconColor="orange"
-            />
-
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              }
-              title="Privacy Compliance"
-              description="Check compliance with GDPR, CCPA, and other privacy regulations to ensure your policies meet legal requirements."
-              iconColor="red"
-            />
-
-            <FeatureCard
-              icon={
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              }
-              title="User-Friendly Interface"
-              description="Clean, intuitive interface designed for both legal professionals and everyday users to easily understand results."
-              iconColor="indigo"
-            />
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700">
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center mb-4">
+                  <span className="text-blue-600 dark:text-blue-400 font-semibold">3</span>
+                </div>
+                <h3 className="font-medium text-gray-900 dark:text-white mb-2">Get your summary</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
+                  Read a simplified version with all the important points clearly listed.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-20">
-          <div className="max-w-4xl mx-auto text-center px-6">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Ready to Analyze Your Privacy Policy?
+        {/* Features */}
+        <div className="py-20">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-4">
+              Why Lexify?
             </h2>
-            <p className="text-xl text-blue-100 mb-8">
-              Join thousands of users who trust our AI to help them understand complex legal documents.
+            <p className="text-gray-600 dark:text-gray-400 mb-12 max-w-xl">
+              Built for people who don&apos;t speak legalese.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="flex gap-4 p-5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1">Fast results</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">Get your summary in seconds, not hours of reading.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1">Nothing missed</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">Every important detail captured and presented clearly.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1">Private & secure</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">Your documents are processed securely and not stored.</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-colors">
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-white mb-1">Completely free</h3>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">No credit card, no sign up. Just upload and go.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="py-20 bg-gray-900 dark:bg-gray-800">
+          <div className="max-w-3xl mx-auto text-center px-6">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+              Ready to understand your next privacy policy?
+            </h2>
+            <p className="text-gray-400 mb-8">
+              It takes less than a minute. No account required.
             </p>
             <Link 
               href="/upload"
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl inline-block"
+              className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3.5 rounded-lg font-medium transition-colors"
             >
-              Get Started Now →
+              Get started free
             </Link>
           </div>
         </div>

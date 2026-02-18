@@ -4,13 +4,13 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Privacy Policy Analyzer",
-  description: "AI-powered tool to analyze and understand privacy policies and legal documents",
+  title: "Lexify - Simplify Legal Documents",
+  description: "Make sense of privacy policies and legal documents in seconds. No legal degree required.",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning={true}>
       <body className={inter.className}>
         {children}
       </body>

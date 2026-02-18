@@ -48,6 +48,9 @@ class RetrieveResponse(BaseModel):
 # ... existing code ...
     sources: list[Source]
 
+class GetTextResponse(BaseModel):
+    text: str
+
 # --- Helper Functions ---
 def get_vector_store(collection_name: str):
 # ... existing code ...
@@ -106,7 +109,7 @@ async def process_pdf(file: UploadFile = File(...)):
 
         return ProcessResponse(
             collection_id=collection_id,
-            chunks_indexed=len(chunks),
+            chunks_indexed=len(chunks), 
             filename=file.filename,
         )
     finally:
@@ -148,6 +151,32 @@ async def retrieve_chunks(request: RetrieveRequest):
         # This can happen if the collection_id doesn't exist
         print(f"Error retrieving chunks: {e}")
         raise HTTPException(status_code=404, detail=f"Collection '{request.collection_id}' not found or error during retrieval.")
+
+@app.get("/get-text/{collection_id}", response_model=GetTextResponse)
+async def get_full_text(collection_id: str):
+    """
+    Retrieves the full original text for a given collection.
+    This is a simplified example and assumes the original file is accessible
+    or that the text is stored elsewhere. For this implementation, we'll
+    re-load and re-process the file, which is inefficient but functional.
+    
+    A better approach would be to store the full text in a database or file
+    and retrieve it directly.
+    """
+    # This is a workaround: we need to find the original file.
+    # Since we don't store it, we can't easily retrieve the full text.
+    # Let's assume for now that we can't implement this without bigger changes.
+    # We will return the text from the vector store instead.
+    try:
+        vector_store = get_vector_store(collection_id)
+        # This is not ideal as it fetches all chunks and joins them,
+        # but it's the best we can do without storing the original text.
+        all_docs = vector_store.get(include=["documents"])
+        full_text = "\n\n".join(all_docs['documents'])
+        return GetTextResponse(text=full_text)
+    except Exception as e:
+        print(f"Error getting full text: {e}")
+        raise HTTPException(status_code=404, detail=f"Could not retrieve full text for collection '{collection_id}'.")
 
 # Health check endpoint
 @app.get("/health")
